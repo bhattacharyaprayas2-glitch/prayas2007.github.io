@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prayas Bhattacharya — Electronics &amp; Software Portfolio</title>
+  <meta name="description" content="B.Sc. Electronics (Honours) Student, Discrete Hardware Prototyper, Classical Tabla Practitioner, and Home Chemistry Explorer in Kolkata, India." />
+  <style>
+    :root {
+      --bg: #07090e;
+      --surface: rgba(15, 20, 31, 0.82);
+      --border: #1e293b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --green: #00ff88;
+      --cyan: #00d4ff;
+      --amber: #ffb703;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    body { line-height: 1.6; overflow-x: hidden; }
+    code, pre, .mono { font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; color: inherit; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .glass { background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 14px; }
+    header { position: sticky; top: 0; z-index: 40; background: rgba(7, 9, 14, 0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 32px; height: 64px; }
+    .brand { font-weight: 700; font-size: 1.1rem; color: var(--green); white-space: nowrap; }
+    .nav-links { display: flex; gap: 24px; font-size: 0.9rem; color: var(--muted); }
+    .nav-links a:hover { color: var(--text); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 0.875rem; cursor: pointer; border: 1px solid var(--border); background: #0f141f; transition: border-color 0.2s, transform 0.15s; white-space: nowrap; }
+    .btn:hover { border-color: var(--cyan); transform: translateY(-1px); }
+    .btn-primary { background: var(--green); color: #05080d; border-color: var(--green); }
+    .btn-primary:hover { background: #2eff9d; border-color: #2eff9d; }
+    .hero { position: relative; min-height: 540px; padding: 80px 0 64px; overflow: hidden; border-bottom: 1px solid var(--border); }
+    #pcb-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.55; }
+    .hero-content { position: relative; z-index: 2; max-width: 760px; }
+    .kicker { display: inline-block; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--green); border: 1px solid rgba(0, 255, 136, 0.3); padding: 4px 10px; border-radius: 6px; margin-bottom: 20px; }
+    h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: 1.1; font-weight: 700; margin-bottom: 14px; }
+    .typing-row { min-height: 34px; font-size: 1.25rem; color: var(--cyan); margin-bottom: 16px; }
+    .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+    .section-title { font-size: 1.85rem; margin-bottom: 8px; }
+    .section-sub { color: var(--muted); margin-bottom: 32px; max-width: 68ch; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+    .card { padding: 24px; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+    .tab-btn { padding: 8px 16px; border-radius: 8px; background: #0b101b; border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 0.875rem; }
+    .tab-btn.active { background: rgba(0, 255, 136, 0.12); color: var(--green); border-color: var(--green); }
+    .lab-panel { display: none; }
+    .lab-panel.active { display: block; }
+    canvas.lab-canvas { width: 100%; height: 280px; background: #05080d; border: 1px solid var(--border); border-radius: 10px; display: block; }
+    .readout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 16px 0; }
+    .metric-box { padding: 12px 14px; background: #090d16; border: 1px solid var(--border); border-radius: 8px; }
+    .metric-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .metric-val { font-size: 1.25rem; font-weight: 700; color: var(--green); margin-top: 4px; }
+    .beat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 10px; margin-top: 18px; }
+    .beat-node { padding: 10px 8px; border-radius: 8px; border: 1px solid var(--border); background: #090d16; text-align: center; cursor: pointer; }
+    .beat-node.active { border-color: var(--amber); background: rgba(255, 183, 3, 0.16); color: var(--amber); }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+    input[type="text"], input[type="email"], textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: #090d16; }
+    input[type="range"] { width: 100%; accent-color: var(--green); }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #0f172a; border: 1px solid var(--green); color: var(--text); padding: 12px 18px; border-radius: 10px; display: none; z-index: 60; }
+    .toast.show { display: block; }
+    footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: 0.875rem; }
+    @media (max-width: 768px) { .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav-inner">
+      <a href="#top" class="brand mono">&lt;PB /&gt;</a>
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#lab">Interactive Lab</a>
+        <a href="#projects">Projects</a>
+        <a href="#hobbies">Hobbies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a href="#contact" class="btn">Contact</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <canvas id="pcb-canvas"></canvas>
+      <div class="container hero-content">
+        <span class="kicker mono">OPEN TO HARDWARE &amp; SOFTWARE COLLABORATIONS</span>
+        <h1>Prayas Bhattacharya</h1>
+        <div class="typing-row mono" id="typing-role">B.Sc. Electronics (Honours) Student</div>
+        <p style="color: var(--muted); margin-bottom: 24px;">Asutosh College (University of Calcutta) &bull; Kolkata, West Bengal, India</p>
+        <div style="display:flex; flex-wrap:wrap; gap:12px;">
+          <a href="#lab" class="btn btn-primary">Explore Interactive Lab</a>
+          <a href="#projects" class="btn">View Projects</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container">
+        <h2 class="section-title">About &amp; Engineering Philosophy</h2>
+        <p class="section-sub">First-principles hardware intuition bridged with embedded telemetry and modern software tooling.</p>
+        <div class="grid-2">
+          <div class="glass card">
+            <p style="margin-bottom:14px;">Pursuing <strong>B.Sc. Electronics (Honours)</strong> with Mathematics, Computer Science, and Physics at <strong>Asutosh College (University of Calcutta)</strong>, I build circuits from the silicon and transistor junction upward.</p>
+            <p style="color:var(--muted);">I prioritize discrete BJT switching (<code>BC547</code>, <code>BC548</code>, <code>BD139</code>, <code>BD140</code>, <code>SL100</code>), operational amplifiers (<code>LM358</code>, <code>UA741</code>), and dead-bug/veroboard prototyping over defaulting to microcontrollers—integrating Arduino and Python when active signal acquisition is needed.</p>
+          </div>
+          <div class="glass card">
+            <h3 style="margin-bottom:12px; color:var(--cyan);">Bench &amp; Tech Stack</h3>
+            <p style="font-size:0.85rem; color:var(--muted); margin-bottom:10px;"><strong style="color:var(--text);">Discrete Components:</strong> NE555 &middot; LM317 &middot; BC547 / BD139 / BD140 / SL100 &middot; LM358 / UA741 &middot; 7-Segment &middot; LDR &middot; DIP Switches</p>
+            <p style="font-size:0.85rem; color:var(--muted); margin-bottom:10px;"><strong style="color:var(--text);">Embedded &amp; Code:</strong> Arduino UNO &middot; C/C++ &middot; Python &middot; HTML/CSS/JS &middot; Google Cloud Run</p>
+            <p style="font-size:0.85rem; color:var(--muted);"><strong style="color:var(--text);">Lab &amp; Analytical:</strong> Oscilloscope Diagnostics &middot; Inorganic Crystal Growth &middot; Organic Synthesis</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="lab" class="section">
+      <div class="container">
+        <h2 class="section-title">Interactive Lab</h2>
+        <p class="section-sub">Three real-time hardware, acoustic rhythm, and chemical lattice simulations.</p>
+        <div class="tabs">
+          <button class="tab-btn active" data-lab="ne555">NE555 Oscilloscope</button>
+          <button class="tab-btn" data-lab="tabla">Tabla Taal Synth</button>
+          <button class="tab-btn" data-lab="crystal">Crystal &amp; Synthesis Lab</button>
+        </div>
+
+        <div id="lab-ne555" class="lab-panel active glass card">
+          <div class="grid-2" style="margin-bottom:16px;">
+            <div>
+              <label>R1: <span id="r1-val" class="mono">10</span> k&Omega;</label>
+              <input type="range" id="r1-slider" min="1" max="100" step="1" value="10" />
+              <label style="margin-top:10px;">R2: <span id="r2-val" class="mono">22</span> k&Omega;</label>
+              <input type="range" id="r2-slider" min="1" max="100" step="1" value="22" />
+              <label style="margin-top:10px;">C: <span id="c-val" class="mono">1.0</span> &mu;F</label>
+              <input type="range" id="c-slider" min="0.1" max="10" step="0.1" value="1.0" />
+            </div>
+            <div>
+              <div class="readout-grid">
+                <div class="metric-box"><div class="metric-label">Frequency</div><div class="metric-val mono" id="f-out">26.7 Hz</div></div>
+                <div class="metric-box"><div class="metric-label">Duty Cycle</div><div class="metric-val mono" id="d-out">59.3%</div></div>
+                <div class="metric-box"><div class="metric-label">T High</div><div class="metric-val mono" id="th-out">22.2 ms</div></div>
+                <div class="metric-box"><div class="metric-label">T Low</div><div class="metric-val mono" id="tl-out">15.2 ms</div></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; font-size:0.85rem;">
+                <span id="led-dot" style="display:inline-block; width:14px; height:14px; border-radius:50%; background:#00ff88;"></span>
+                <span class="mono">Virtual Output LED</span>
+              </div>
+            </div>
+          </div>
+          <canvas id="scope-canvas" class="lab-canvas"></canvas>
+        </div>
+
+        <div id="lab-tabla" class="lab-panel glass card">
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin-bottom:14px;">
+            <div id="taal-buttons" class="tabs" style="margin-bottom:0;"></div>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <label style="margin:0;">BPM: <span id="bpm-val" class="mono">120</span></label>
+              <input type="range" id="bpm-slider" min="60" max="240" value="120" style="width:140px;" />
+              <button class="btn btn-primary" id="tabla-toggle">Start Taal</button>
+            </div>
+          </div>
+          <div id="taal-info" class="mono" style="font-size:0.85rem; color:var(--cyan);"></div>
+          <div id="beat-grid" class="beat-grid"></div>
+        </div>
+
+        <div id="lab-crystal" class="lab-panel glass card">
+          <div id="specimen-buttons" class="tabs"></div>
+          <div class="grid-2">
+            <canvas id="crystal-canvas" class="lab-canvas"></canvas>
+            <div>
+              <h3 id="spec-name" style="margin-bottom:6px;"></h3>
+              <p id="spec-formula" class="mono" style="color:var(--cyan); margin-bottom:10px;"></p>
+              <p id="spec-system" style="font-size:0.9rem; color:var(--amber); margin-bottom:10px;"></p>
+              <p id="spec-note" style="font-size:0.9rem; color:var(--muted);"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <div class="container">
+        <h2 class="section-title">Engineering &amp; Software Projects</h2>
+        <p class="section-sub">Hardware builds, embedded instrumentation, and cloud-deployed applications.</p>
+        <div id="project-filters" class="tabs"></div>
+        <div id="project-grid" class="grid-3"></div>
+      </div>
+    </section>
+
+    <section id="hobbies" class="section">
+      <div class="container">
+        <h2 class="section-title">Hobbies &amp; Creative Corner</h2>
+        <div class="grid-3" style="margin-top:24px;">
+          <div class="glass card">
+            <h3 style="margin-bottom:8px; color:var(--amber);">Indian Classical Tabla</h3>
+            <p style="font-size:0.9rem; color:var(--muted);">Training under a veteran Tabla Maestro; practicing Trital, Dadra, Shasthi, and Jhampa alongside Kayda, Tukra, and Chakradar compositions.</p>
+          </div>
+          <div class="glass card">
+            <h3 style="margin-bottom:8px; color:var(--cyan);">Home Chemistry Setup</h3>
+            <p style="font-size:0.9rem; color:var(--muted);">Cultivating single crystals of potash alum, copper sulfate, nickel sulfate, and cobalt chloride alongside saponification and organic esterification.</p>
+          </div>
+          <div class="glass card">
+            <h3 style="margin-bottom:8px; color:var(--green);">Music &amp; Classic Bengali Cinema</h3>
+            <p style="font-size:0.9rem; color:var(--muted);">Deep appreciation for retro and modern Bengali music and classic Bengali cinematic aesthetics.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section" style="border-bottom:none;">
+      <div class="container" style="max-width:720px;">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-sub">Reach out for electronics prototyping, embedded instrumentation, or software collaborations.</p>
+        <form id="contact-form" class="glass card">
+          <div class="grid-2">
+            <div class="form-group"><label for="c-name">Name</label><input id="c-name" type="text" required /></div>
+            <div class="form-group"><label for="c-email">Email</label><input id="c-email" type="email" required /></div>
+          </div>
+          <div class="form-group"><label for="c-subject">Subject</label><input id="c-subject" type="text" required /></div>
+          <div class="form-group"><label for="c-message">Message</label><textarea id="c-message" rows="4" required></textarea></div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">&copy; 2026 Prayas Bhattacharya &bull; Engineered with Discrete Precision in Kolkata, India</div>
+  </footer>
+  <div id="toast" class="toast">Message validated and ready!</div>
+
+  <script>
+    const PROJECTS = [{"id":"arduino-oscilloscope","title":"Arduino UNO R3 Serial Plotter Oscilloscope","category":"Embedded & IoT","summary":"Custom analog front-end paired with NE555 timer signal generators to capture, condition, and visualize low-frequency waveforms in real time over serial telemetry.","specs":["Arduino UNO R3","NE555 Signal Gen","Analog Front-End","Serial Plotter"],"highlightMetric":"Real-Time Waveform Capture"},{"id":"lm317-psu-ldr","title":"BD139 / LM317 Precision Linear Power Supply & 3-Pin LDR Module","category":"Discrete Hardware","summary":"Veroboard-soldered variable regulated DC power supply featuring pass-transistor current boost alongside a calibrated 3-pin light-sensing module with trimmer potentiometer.","specs":["LM317 Regulator","BD139 Pass BJT","Veroboard Soldered","LDR + Trimpot"],"highlightMetric":"1.25V–15V Regulated Rail"},{"id":"discrete-counter","title":"Discrete Transistor Logic & 7-Segment Counter Prototypes","category":"Discrete Hardware","summary":"Pure hardware switching and display driving circuits built on breadboards and veroboards using complementary BJTs, dual op-amp comparators, and DIP switch arrays.","specs":["BC547 / BD139 / BD140","LM358 Op-Amp","7-Segment LED","DIP Switches"],"highlightMetric":"Zero-MCU Discrete Logic"},{"id":"water-dispenser","title":"Touchless Automatic Water Dispenser","category":"Embedded & IoT","summary":"Automated contactless hygiene dispensing system integrating an IR obstacle proximity sensor, 5V opto-isolated relay module, and submersible DC water pump.","specs":["IR Obstacle Sensor","5V Relay Module","Submersible DC Pump","5V Rail"],"highlightMetric":"Contactless Actuation"},{"id":"dht11-monitor","title":"Arduino DHT11 Environmental Monitor","category":"Embedded & IoT","summary":"Real-time ambient temperature and relative humidity sensing unit displaying continuous calibrated telemetry on a 16x2 JHD 162A character LCD.","specs":["Arduino UNO","DHT11 Sensor","JHD 162A 16x2 LCD","C / C++"],"highlightMetric":"Live Dual-Line Readout"},{"id":"personal-gemini-journal","title":"Personal Gemini Journal","category":"AI & Cloud","summary":"Full-stack AI journaling web application containerized with Docker and deployed on Google Cloud Run for the Gen AI Academy APAC Edition Ideathon.","specs":["Google Cloud Run","Docker Container","Gemini API","Full-Stack Web"],"highlightMetric":"APAC Ideathon Build"}];
+    const TAALS = [{"id":"trital","name":"Trital (16 Beats)","beatsCount":16,"vibhagStructure":"4 + 4 + 4 + 4","character":"Symmetric classical North Indian foundation taal (3 Talis, 1 Khali)","defaultBpm":120,"beats":[{"beatNumber":1,"bol":"Dha","stroke":"dha","marker":"X","vibhagStart":true},{"beatNumber":2,"bol":"Dhin","stroke":"dhin"},{"beatNumber":3,"bol":"Dhin","stroke":"dhin"},{"beatNumber":4,"bol":"Dha","stroke":"dha"},{"beatNumber":5,"bol":"Dha","stroke":"dha","marker":"2","vibhagStart":true},{"beatNumber":6,"bol":"Dhin","stroke":"dhin"},{"beatNumber":7,"bol":"Dhin","stroke":"dhin"},{"beatNumber":8,"bol":"Dha","stroke":"dha"},{"beatNumber":9,"bol":"Dha","stroke":"dha","marker":"0","vibhagStart":true},{"beatNumber":10,"bol":"Tin","stroke":"tin"},{"beatNumber":11,"bol":"Tin","stroke":"tin"},{"beatNumber":12,"bol":"Ta","stroke":"ta"},{"beatNumber":13,"bol":"Ta","stroke":"ta","marker":"3","vibhagStart":true},{"beatNumber":14,"bol":"Dhin","stroke":"dhin"},{"beatNumber":15,"bol":"Dhin","stroke":"dhin"},{"beatNumber":16,"bol":"Dha","stroke":"dha"}]},{"id":"dadra","name":"Dadra (6 Beats)","beatsCount":6,"vibhagStructure":"3 + 3","character":"Lilting 6-matra light-classical & Rabindra Sangeet cycle","defaultBpm":132,"beats":[{"beatNumber":1,"bol":"Dha","stroke":"dha","marker":"X","vibhagStart":true},{"beatNumber":2,"bol":"Dhin","stroke":"dhin"},{"beatNumber":3,"bol":"Na","stroke":"na"},{"beatNumber":4,"bol":"Dha","stroke":"dha","marker":"0","vibhagStart":true},{"beatNumber":5,"bol":"Tun","stroke":"tun"},{"beatNumber":6,"bol":"Na","stroke":"na"}]},{"id":"shasthi","name":"Shasthi (6 Beats)","beatsCount":6,"vibhagStructure":"2 + 4","character":"Asymmetric 2+4 pulse widely used in Bengali classical & devotional repertoire","defaultBpm":116,"beats":[{"beatNumber":1,"bol":"Dha","stroke":"dha","marker":"X","vibhagStart":true},{"beatNumber":2,"bol":"Dhin","stroke":"dhin"},{"beatNumber":3,"bol":"Dha","stroke":"dha","marker":"2","vibhagStart":true},{"beatNumber":4,"bol":"Ge","stroke":"ge"},{"beatNumber":5,"bol":"Tin","stroke":"tin"},{"beatNumber":6,"bol":"Na","stroke":"na"}]},{"id":"jhampa","name":"Jhampa (10 Beats)","beatsCount":10,"vibhagStructure":"2 + 3 + 2 + 3","character":"Swaying asymmetric 10-beat Jhaptaal cycle with alternating 2 and 3 vibhags","defaultBpm":124,"beats":[{"beatNumber":1,"bol":"Dhi","stroke":"dhi","marker":"X","vibhagStart":true},{"beatNumber":2,"bol":"Na","stroke":"na"},{"beatNumber":3,"bol":"Dhi","stroke":"dhi","marker":"2","vibhagStart":true},{"beatNumber":4,"bol":"Dhi","stroke":"dhi"},{"beatNumber":5,"bol":"Na","stroke":"na"},{"beatNumber":6,"bol":"Ti","stroke":"ti","marker":"0","vibhagStart":true},{"beatNumber":7,"bol":"Na","stroke":"na"},{"beatNumber":8,"bol":"Dhi","stroke":"dhi","marker":"3","vibhagStart":true},{"beatNumber":9,"bol":"Dhi","stroke":"dhi"},{"beatNumber":10,"bol":"Na","stroke":"na"}]}];
+    const SPECIMENS = [{"id":"cuso4","name":"Copper(II) Sulfate Pentahydrate","formula":"CuSO4·5H2O","systemOrClass":"Triclinic Crystal System","kind":"crystal","latticeType":"triclinic","accentColor":"#00d4ff","secondaryColor":"#0284c7","habit":"Deep sapphire-blue parallelogram prisms (a ≠ b ≠ c, α ≠ β ≠ γ ≠ 90°)","synthesisNote":"Slow evaporation of a filtered saturated aqueous solution seeded with a clear single-crystal nucleus suspended on nylon filament.","conditions":"25 °C · Slow Evaporation · pH ~4.0"},{"id":"alum","name":"Potash Alum","formula":"KAl(SO4)2·12H2O","systemOrClass":"Isometric / Octahedral System","kind":"crystal","latticeType":"octahedral","accentColor":"#e2e8f0","secondaryColor":"#38bdf8","habit":"Glass-clear regular octahedrons with truncated {111} and {100} faces","synthesisNote":"Recrystallized from hot supersaturated aqueous solution cooled gradually in an insulated bath to suppress secondary nucleation.","conditions":"22–26 °C · Seeded Growth · Cubic Fm3̄"},{"id":"niso4","name":"Nickel(II) Sulfate Hexahydrate","formula":"NiSO4·6H2O","systemOrClass":"Tetragonal Crystal System","kind":"crystal","latticeType":"tetragonal","accentColor":"#00ff88","secondaryColor":"#059669","habit":"Emerald-green square bipyramidal and tabular prisms (a = b ≠ c)","synthesisNote":"Controlled isothermal evaporation between 30–35 °C yields the blue-emerald α-hexahydrate polymorph cleanly.","conditions":"32 °C · Isothermal Evaporation · P4₁2₁2"},{"id":"cocl2","name":"Cobalt(II) Chloride Hexahydrate","formula":"CoCl2·6H2O","systemOrClass":"Monoclinic Crystal System","kind":"crystal","latticeType":"monoclinic","accentColor":"#fb7185","secondaryColor":"#e11d48","habit":"Ruby-crimson monoclinic prisms (β ≈ 122.3°), thermochromic hydration","synthesisNote":"Grown from slightly acidified aqueous solution; dehydrates reversibly to royal-blue CoCl2 upon gentle heating.","conditions":"24 °C · Controlled Humidity · C2/m"},{"id":"methyl-salicylate","name":"Methyl Salicylate","formula":"C8H8O3","systemOrClass":"Fischer Esterification","kind":"molecule","latticeType":"ester","accentColor":"#ffb703","secondaryColor":"#f59e0b","habit":"Aromatic ortho-hydroxybenzoate ester (Oil of Wintergreen)","synthesisNote":"Refluxed salicylic acid with excess methanol and catalytic concentrated H2SO4, followed by sodium bicarbonate wash and phase separation.","conditions":"Reflux 65 °C · H2SO4 Catalyst · Ester Bond"},{"id":"salicylic-acid","name":"Salicylic Acid","formula":"C7H6O3","systemOrClass":"Aspirin Hydrolysis / Crystallization","kind":"molecule","latticeType":"acid","accentColor":"#38bdf8","secondaryColor":"#00ff88","habit":"Fine white needle-like monoclinic crystals (2-hydroxybenzoic acid)","synthesisNote":"Alkaline hydrolysis of acetylsalicylic acid followed by controlled acidification with dilute HCl and cold-water recrystallization.","conditions":"Reflux + HCl Precipitation · mp 158.6 °C"}];
+
+    // Typing role animation
+    const roles = [
+      'B.Sc. Electronics (Honours) Student',
+      'Discrete Hardware & Circuit Prototyper',
+      'Classical Tabla Practitioner',
+      'Home Chemistry Explorer'
+    ];
+    let roleIdx = 0;
+    setInterval(() => {
+      roleIdx = (roleIdx + 1) % roles.length;
+      const el = document.getElementById('typing-role');
+      if (el) el.textContent = roles[roleIdx];
+    }, 3000);
+
+    // PCB background canvas
+    const pcbCanvas = document.getElementById('pcb-canvas');
+    const pcbCtx = pcbCanvas.getContext('2d');
+    const nodes = Array.from({ length: 34 }, () => ({
+      x: Math.random(), y: Math.random(),
+      vx: (Math.random() - 0.5) * 0.0004, vy: (Math.random() - 0.5) * 0.0004
+    }));
+    function drawPcb() {
+      const w = pcbCanvas.width = pcbCanvas.offsetWidth;
+      const h = pcbCanvas.height = pcbCanvas.offsetHeight;
+      pcbCtx.clearRect(0, 0, w, h);
+      nodes.forEach((n, i) => {
+        n.x = (n.x + n.vx + 1) % 1;
+        n.y = (n.y + n.vy + 1) % 1;
+        const x1 = n.x * w, y1 = n.y * h;
+        for (let j = i + 1; j < nodes.length; j++) {
+          const x2 = nodes[j].x * w, y2 = nodes[j].y * h;
+          const dist = Math.hypot(x2 - x1, y2 - y1);
+          if (dist < 150) {
+            pcbCtx.strokeStyle = 'rgba(0, 255, 136, ' + (0.22 * (1 - dist / 150)) + ')';
+            pcbCtx.beginPath();
+            pcbCtx.moveTo(x1, y1);
+            pcbCtx.lineTo(x2, y1);
+            pcbCtx.lineTo(x2, y2);
+            pcbCtx.stroke();
+          }
+        }
+        pcbCtx.fillStyle = '#00d4ff';
+        pcbCtx.beginPath();
+        pcbCtx.arc(x1, y1, 2.2, 0, Math.PI * 2);
+        pcbCtx.fill();
+      });
+      requestAnimationFrame(drawPcb);
+    }
+    requestAnimationFrame(drawPcb);
+
+    // Lab tabs
+    document.querySelectorAll('[data-lab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-lab]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.lab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('lab-' + btn.dataset.lab).classList.add('active');
+      });
+    });
+
+    // NE555 Simulator
+    const r1S = document.getElementById('r1-slider');
+    const r2S = document.getElementById('r2-slider');
+    const cS = document.getElementById('c-slider');
+    const scopeCanvas = document.getElementById('scope-canvas');
+    const scopeCtx = scopeCanvas.getContext('2d');
+    let scopeTime = 0;
+
+    function update555Metrics() {
+      const r1 = parseFloat(r1S.value) * 1000;
+      const r2 = parseFloat(r2S.value) * 1000;
+      const c = parseFloat(cS.value) * 1e-6;
+      document.getElementById('r1-val').textContent = r1S.value;
+      document.getElementById('r2-val').textContent = r2S.value;
+      document.getElementById('c-val').textContent = parseFloat(cS.value).toFixed(1);
+      const f = 1.44 / ((r1 + 2 * r2) * c);
+      const duty = ((r1 + r2) / (r1 + 2 * r2)) * 100;
+      const th = 0.693 * (r1 + r2) * c * 1000;
+      const tl = 0.693 * r2 * c * 1000;
+      document.getElementById('f-out').textContent = f >= 1000 ? (f/1000).toFixed(2) + ' kHz' : f.toFixed(1) + ' Hz';
+      document.getElementById('d-out').textContent = duty.toFixed(1) + '%';
+      document.getElementById('th-out').textContent = th.toFixed(1) + ' ms';
+      document.getElementById('tl-out').textContent = tl.toFixed(1) + ' ms';
+      return { r1, r2, c, duty };
+    }
+
+    function renderScope() {
+      const { r1, r2, c, duty } = update555Metrics();
+      const w = scopeCanvas.width = scopeCanvas.offsetWidth || 600;
+      const h = scopeCanvas.height = 280;
+      scopeCtx.clearRect(0, 0, w, h);
+      scopeCtx.strokeStyle = 'rgba(30,41,59,0.7)';
+      for (let x = 0; x < w; x += 40) { scopeCtx.beginPath(); scopeCtx.moveTo(x, 0); scopeCtx.lineTo(x, h); scopeCtx.stroke(); }
+      for (let y = 0; y < h; y += 35) { scopeCtx.beginPath(); scopeCtx.moveTo(0, y); scopeCtx.lineTo(w, y); scopeCtx.stroke(); }
+
+      const tauC = (r1 + r2) * c;
+      const tauD = r2 * c;
+      const tH = Math.LN2 * tauC;
+      const tL = Math.LN2 * tauD;
+      const T = tH + tL;
+      const cycles = 3;
+      scopeTime += 0.016;
+      const visualPeriod = Math.max(0.25, Math.min(2.0, T * 8));
+      const ledOn = ((scopeTime % visualPeriod) / visualPeriod) < (duty / 100);
+      document.getElementById('led-dot').style.background = ledOn ? '#00ff88' : '#1e293b';
+
+      scopeCtx.lineWidth = 2;
+      scopeCtx.strokeStyle = '#00ff88';
+      scopeCtx.beginPath();
+      for (let px = 0; px < w; px++) {
+        const t = ((px / w) * cycles * T + scopeTime * T * 0.6) % T;
+        const y = t < tH ? h * 0.18 : h * 0.82;
+        if (px === 0) scopeCtx.moveTo(px, y); else scopeCtx.lineTo(px, y);
+      }
+      scopeCtx.stroke();
+
+      scopeCtx.strokeStyle = '#00d4ff';
+      scopeCtx.beginPath();
+      for (let px = 0; px < w; px++) {
+        const t = ((px / w) * cycles * T + scopeTime * T * 0.6) % T;
+        const v = t < tH ? 5 * (1 - (2/3) * Math.exp(-t / tauC)) : (10/3) * Math.exp(-(t - tH) / tauD);
+        const y = h * 0.85 - (v / 5) * h * 0.7;
+        if (px === 0) scopeCtx.moveTo(px, y); else scopeCtx.lineTo(px, y);
+      }
+      scopeCtx.stroke();
+      requestAnimationFrame(renderScope);
+    }
+    requestAnimationFrame(renderScope);
+
+    // Tabla Synthesizer
+    let currentTaal = TAALS[0];
+    let audioCtx = null;
+    let tablaTimer = null;
+    let beatIdx = 0;
+    function playBol(bol) {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const now = audioCtx.currentTime;
+      const hasBayan = ['Dha','Dhin','Dhi','Ge'].includes(bol);
+      if (hasBayan) {
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.frequency.setValueAtTime(155, now);
+        osc.frequency.exponentialRampToValueAtTime(84, now + 0.25);
+        g.gain.setValueAtTime(0.45, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+        osc.connect(g).connect(audioCtx.destination);
+        osc.start(now); osc.stop(now + 0.34);
+      }
+      if (bol !== 'Ge') {
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(bol === 'Tin' || bol === 'Ta' || bol === 'Na' ? 490 : 410, now);
+        g.gain.setValueAtTime(0.28, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(g).connect(audioCtx.destination);
+        osc.start(now); osc.stop(now + 0.22);
+      }
+    }
+    function renderTaal() {
+      const tb = document.getElementById('taal-buttons');
+      tb.innerHTML = '';
+      TAALS.forEach(t => {
+        const b = document.createElement('button');
+        b.className = 'tab-btn' + (t.id === currentTaal.id ? ' active' : '');
+        b.textContent = t.name;
+        b.onclick = () => { currentTaal = t; beatIdx = 0; renderTaal(); };
+        tb.appendChild(b);
+      });
+      document.getElementById('taal-info').textContent = currentTaal.vibhagStructure + ' Vibhags · ' + currentTaal.character;
+      const bg = document.getElementById('beat-grid');
+      bg.innerHTML = '';
+      currentTaal.beats.forEach((beat, idx) => {
+        const node = document.createElement('button');
+        node.className = 'beat-node' + (idx === beatIdx ? ' active' : '');
+        node.innerHTML = '<div class="mono" style="font-size:0.7rem; color:var(--muted);">' + beat.beatNumber + (beat.marker ? ' [' + beat.marker + ']' : '') + '</div><div style="font-weight:700;">' + beat.bol + '</div>';
+        node.onclick = () => { beatIdx = idx; playBol(beat.bol); renderTaal(); };
+        bg.appendChild(node);
+      });
+    }
+    renderTaal();
+    document.getElementById('bpm-slider').oninput = (e) => {
+      document.getElementById('bpm-val').textContent = e.target.value;
+    };
+    document.getElementById('tabla-toggle').onclick = () => {
+      const btn = document.getElementById('tabla-toggle');
+      if (tablaTimer) {
+        clearInterval(tablaTimer); tablaTimer = null; btn.textContent = 'Start Taal';
+      } else {
+        btn.textContent = 'Stop Taal';
+        const step = () => {
+          const beat = currentTaal.beats[beatIdx];
+          playBol(beat.bol);
+          renderTaal();
+          beatIdx = (beatIdx + 1) % currentTaal.beats.length;
+        };
+        step();
+        tablaTimer = setInterval(step, 60000 / parseInt(document.getElementById('bpm-slider').value, 10));
+      }
+    };
+
+    // Crystal & Synthesis Canvas
+    let currentSpec = SPECIMENS[0];
+    const cCanvas = document.getElementById('crystal-canvas');
+    const cCtx = cCanvas.getContext('2d');
+    function renderSpecControls() {
+      const box = document.getElementById('specimen-buttons');
+      box.innerHTML = '';
+      SPECIMENS.forEach(s => {
+        const b = document.createElement('button');
+        b.className = 'tab-btn' + (s.id === currentSpec.id ? ' active' : '');
+        b.textContent = s.name;
+        b.onclick = () => { currentSpec = s; renderSpecControls(); };
+        box.appendChild(b);
+      });
+      document.getElementById('spec-name').textContent = currentSpec.name;
+      document.getElementById('spec-formula').textContent = currentSpec.formula;
+      document.getElementById('spec-system').textContent = currentSpec.systemOrClass;
+      document.getElementById('spec-note').textContent = currentSpec.synthesisNote;
+    }
+    renderSpecControls();
+    let angle = 0;
+    function drawCrystal() {
+      const w = cCanvas.width = cCanvas.offsetWidth || 400;
+      const h = cCanvas.height = 280;
+      cCtx.clearRect(0, 0, w, h);
+      angle += 0.015;
+      const cx = w / 2, cy = h / 2, scale = 75;
+      const pts = [
+        [-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],
+        [-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]
+      ].map(([x,y,z]) => {
+        const rx = x * Math.cos(angle) - z * Math.sin(angle);
+        const rz = x * Math.sin(angle) + z * Math.cos(angle);
+        const ry = y * Math.cos(0.4) - rz * Math.sin(0.4);
+        return [cx + rx * scale, cy + ry * scale];
+      });
+      const edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+      cCtx.strokeStyle = currentSpec.accentColor;
+      cCtx.lineWidth = 2;
+      edges.forEach(([a,b]) => {
+        cCtx.beginPath(); cCtx.moveTo(pts[a][0], pts[a][1]); cCtx.lineTo(pts[b][0], pts[b][1]); cCtx.stroke();
+      });
+      requestAnimationFrame(drawCrystal);
+    }
+    requestAnimationFrame(drawCrystal);
+
+    // Filterable Projects
+    let activeCat = 'All';
+    const cats = ['All', 'Discrete Hardware', 'Embedded & IoT', 'AI & Cloud'];
+    function renderProjects() {
+      const fBox = document.getElementById('project-filters');
+      fBox.innerHTML = '';
+      cats.forEach(c => {
+        const b = document.createElement('button');
+        b.className = 'tab-btn' + (c === activeCat ? ' active' : '');
+        b.textContent = c;
+        b.onclick = () => { activeCat = c; renderProjects(); };
+        fBox.appendChild(b);
+      });
+      const grid = document.getElementById('project-grid');
+      grid.innerHTML = '';
+      PROJECTS.filter(p => activeCat === 'All' || p.category === activeCat).forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'glass card';
+        card.innerHTML = '<div class="mono" style="font-size:0.75rem; color:var(--cyan); margin-bottom:6px;">' + p.category + '</div>' +
+          '<h3 style="margin-bottom:8px;">' + p.title + '</h3>' +
+          '<p style="font-size:0.9rem; color:var(--muted); margin-bottom:12px;">' + p.summary + '</p>' +
+          '<div class="mono" style="font-size:0.78rem; color:var(--green);">' + p.specs.join(' · ') + '</div>';
+        grid.appendChild(card);
+      });
+    }
+    renderProjects();
+
+    // Contact Form
+    document.getElementById('contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
